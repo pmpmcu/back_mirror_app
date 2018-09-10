@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="G:\PROJECT_KAFA\CAR_LXQ\OBD_APP\app\src\main\assets"/><source path="G:\PROJECT_KAFA\CAR_LXQ\OBD_APP\app\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="G:\PROJECT_KAFA\CAR_LXQ\OBD_APP\app\src\debug\assets"/></dataSet></merger>

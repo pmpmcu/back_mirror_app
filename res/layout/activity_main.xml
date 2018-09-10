@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <LinearLayout
+        android:id="@+id/btnLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Clear" />
+
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Scan" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/mEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="send commands by Hex"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/sendBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Send" />
+    </LinearLayout>
+
+</LinearLayout>

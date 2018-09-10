@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\layout_device_list.xml.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\layout\\device_list.xml"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher.png.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\layout_device_name.xml.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\layout\\device_name.xml"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher.png.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\layout_list_item.xml.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\layout\\list_item.xml"
+    },
+    {
+        "merged": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher.png.flat",
+        "source": "G:\\PROJECT_KAFA\\CAR_LXQ\\OBD_APP\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    }
+]

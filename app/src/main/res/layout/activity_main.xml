@@ -1,0 +1,179 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+
+
+
+     <!-- 显示OBD 信息-->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/TextView_rpm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="转速/每分钟："
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/TextView_rpm_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="转"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/TextView_vss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="速度/公里："
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/TextView_vss_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="公里"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/TextView_Battery_Voltage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="电压/伏："
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/TextView_rpm_Battery_Voltage_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="伏"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/TextView_Throttle_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="油门/%："
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/TextView_vss_Throttle_position_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="百份比"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <!-- 显示OBD 信息-->
+
+
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/TextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="rx display"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/mEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="send commands by Hex"
+            android:singleLine="true" >
+
+        </EditText>
+
+        <Button
+            android:id="@+id/sendBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Send" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/send_hex_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="HEX_Send" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btnLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清除发送信息" />
+
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="蓝牙扫描" />
+    </LinearLayout>
+
+
+</LinearLayout>
