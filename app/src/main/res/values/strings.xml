@@ -15,7 +15,7 @@
 -->
 
 <resources>
-    <string name="app_name">OBDII</string>
+    <string name="app_name">后视镜控制器</string>
 
     <!--  BluetoothChat -->
     <string name="send">Send</string>

@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,30 +36,45 @@ public class MainActivity extends Activity implements OnClickListener {
 	private static final int REQUEST_CONNECT_DEVICE = 1;
 	private static final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 	private List<Integer> mBuffer;
-	private ListView lv;
+
 	List<Map<String, Object>> mData = new ArrayList<Map<String, Object>>();;
 	private SimpleAdapter adapter;
 	private static final String TAG = "MainActivity";
 	private BluetoothAdapter mBluetoothAdapter;
 	private ConnectThread mConnectThread;
 	public ConnectedThread mConnectedThread;
-	private Button mClearBtn, mScanBtn, mSendBtn,HEX_Send_Btn;
+	private Button mClearBtn, mScanBtn, mSendBtn;
 	private EditText mEditText;
 	private String mTitle;
     private int[] bt_rx_data_buf=new int[1024];
     private int rx_cnt=0;
-	private TextView lblTitle_bt_rx=null;
+	private TextView lblTitle_BM_ON_OFF=null;
 
-	private TextView lblTitle_OBD_voltage=null;
-	private TextView lblTitle_OBD_speed=null;
-	private TextView lblTitle_OBD_Engine_RPM=null;
-	private TextView lblTitle_OBD_Throttle_position=null;
+	private TextView lblTitle_BM_DOWN_time=null;
+	private TextView lblTitle_BM_UP_time=null;
+	private TextView lblTitle_BM_BACK_time=null;
+	private TextView lblTitle_BM_rx_data=null;
+
+	private Button BT_DOWN_ADD,BT_DOWN_DEC,BT_DOWN_OK;
+	private Button BT_UP_ADD,BT_UP_DEC,BT_UP_OK;
+	private Button BT_BACK_ADD,BT_BACK_DEC,BT_BACK_OK;
+	private Button BT_BM_ON,BT_BM_OFF,BT_BM_ON_OFF_OK;
 
 	private String readMessage="";
 	private String bt_rx_string_buf="";
 	private byte[] bt_rx_byte_buf=new byte[1024];
 	private int task_cnt=0;
 	private int bt_connect_flag=0;
+
+	private int bm_down_time=3000; //下翻时间
+    private int bm_up_time=3000;//上翻时间
+    private int bm_back_time=10000;//自动回位时间
+	private int bm_tx_data_flag=0;
+	byte[] BM_txbuf=new byte[8];
+    byte BM_ON_OFF_FLAG=1;
+
+	//BluetoothDevice device1;
+	BluetoothDevice device;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,21 +86,55 @@ public class MainActivity extends Activity implements OnClickListener {
 		mClearBtn = (Button) findViewById(R.id.clearBtn);
 		mScanBtn = (Button) findViewById(R.id.scanBtn);
 		mSendBtn = (Button) findViewById(R.id.sendBtn);
-		HEX_Send_Btn=(Button) findViewById(R.id.send_hex_Btn);
+
+
+		BT_DOWN_ADD= (Button) findViewById(R.id.bt_DOWN_ADD);
+		BT_DOWN_DEC= (Button) findViewById(R.id.bt_DOWN_DEC);
+		BT_DOWN_OK=(Button) findViewById(R.id.bt_DOWN_OK);
+
+		BT_UP_ADD=(Button) findViewById(R.id.bt_up_add);
+		BT_UP_DEC=(Button) findViewById(R.id.bt_up_DEC);
+		BT_UP_OK=(Button) findViewById(R.id.bt_up_OK);
+
+		BT_BACK_ADD=(Button) findViewById(R.id.bt_back_ADD);
+		BT_BACK_DEC=(Button) findViewById(R.id.bt_back_DEC);
+		BT_BACK_OK=(Button) findViewById(R.id.bt_back_OK);
+
+		BT_BM_ON=(Button) findViewById(R.id.bt_bm_on);
+		BT_BM_OFF=(Button) findViewById(R.id.bt_bm_off);
+		BT_BM_ON_OFF_OK=(Button) findViewById(R.id.bt_bm_on_off_ok);
 
 		mClearBtn.setOnClickListener(this);
 		mScanBtn.setOnClickListener(this);
 		mSendBtn.setOnClickListener(this);
-		HEX_Send_Btn.setOnClickListener(this);
 
-		lv = (ListView) findViewById(R.id.listview);
+
+		BT_DOWN_ADD.setOnClickListener(this);
+		BT_DOWN_DEC.setOnClickListener(this);
+		BT_DOWN_OK.setOnClickListener(this);
+
+		BT_UP_ADD.setOnClickListener(this);
+		BT_UP_DEC.setOnClickListener(this);
+		BT_UP_OK.setOnClickListener(this);
+
+		BT_BACK_ADD.setOnClickListener(this);
+		BT_BACK_DEC.setOnClickListener(this);
+		BT_BACK_OK.setOnClickListener(this);
+
+		BT_BM_ON.setOnClickListener(this);
+		BT_BM_OFF.setOnClickListener(this);
+		BT_BM_ON_OFF_OK.setOnClickListener(this);
+
 		mEditText = (EditText) findViewById(R.id.mEditText);
-		lblTitle_bt_rx= (TextView) findViewById(R.id.TextView1);
+		lblTitle_BM_ON_OFF= (TextView) findViewById(R.id.TextView_BM_ON_OFF);
 
-		lblTitle_OBD_voltage=(TextView) findViewById(R.id.TextView_rpm_Battery_Voltage_val);
-		lblTitle_OBD_speed=(TextView) findViewById(R.id.TextView_vss_val);
-		lblTitle_OBD_Engine_RPM=(TextView) findViewById(R.id.TextView_rpm_val);
-		lblTitle_OBD_Throttle_position=(TextView) findViewById(R.id.TextView_vss_Throttle_position_val);
+		lblTitle_BM_DOWN_time=(TextView) findViewById(R.id.TextView_DOWN__time_VAL);
+		lblTitle_BM_UP_time=(TextView) findViewById(R.id.TextView_up_time_val);
+		lblTitle_BM_BACK_time=(TextView) findViewById(R.id.TextView_back_time_val);
+		lblTitle_BM_rx_data=(TextView) findViewById(R.id.TextView_BM_RX_DATA);
+
+		BM_txbuf[0]=(byte)0xff;
+		BM_txbuf[1]=(byte)0x66;
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		// If the adapter is null, then Bluetooth is not supported
@@ -92,10 +144,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			return;
 		}
 
-		mBuffer = new ArrayList<Integer>();
-		adapter = new SimpleAdapter(MainActivity.this, mData, R.layout.list_item, new String[] { "list" },
-				new int[] { R.id.tv_item });
-		lv.setAdapter(adapter);
+		//mBuffer = new ArrayList<Integer>();
+		//adapter = new SimpleAdapter(MainActivity.this, mData, R.layout.list_item, new String[] { "list" },
+				//new int[] { R.id.tv_item });
+		//lv.setAdapter(adapter);
 	}
 
 	@Override
@@ -107,8 +159,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 			// Otherwise, setup the chat session
+			Log.d(TAG, "-------!mBluetoothAdapter.isEnabled()-------");
 		}
-
+		Log.d(TAG, "------------------onStart--------------------------");
+		//autoConnect();
 	}
 
 	@Override
@@ -134,10 +188,16 @@ public class MainActivity extends Activity implements OnClickListener {
 			} else {
 				String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 				// Get the BLuetoothDevice object
-				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+				//BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 				// Attempt to connect to the device
+				device = mBluetoothAdapter.getRemoteDevice(address);
+				saveDeviceAddress();
+				//autoConnect();
+				//getDeviceAndConnect();
+
 				connect(device);
 				//lblTitle_bt_rx.setText("bt_connect_ok");
+
 				mHanlder.postDelayed(task, 1000);//第一次调用,延迟1秒执行task
 
 			}
@@ -256,9 +316,10 @@ public class MainActivity extends Activity implements OnClickListener {
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);
-					synchronized (mBuffer) {
+					//synchronized (mBuffer)
+					{
                         for (int i = 0; i < bytes; i++) {
-                            mBuffer.add(buffer[i] & 0xFF);
+                           // mBuffer.add(buffer[i] & 0xFF);
                             bt_rx_data_buf[rx_cnt+i] = buffer[i] & 0xFF;
 							bt_rx_byte_buf[rx_cnt+i]=buffer[i];
                             //System.out.println(buffer[i] & 0xFF);
@@ -351,9 +412,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		isBackCliecked = false;
 		if (v == mClearBtn) {
-			mBuffer.clear();
-			mData.clear();
-			adapter.notifyDataSetChanged();
+			//mBuffer.clear();
+			//mData.clear();
+			//adapter.notifyDataSetChanged();
 		} else if (v == mScanBtn) {
 			if (mConnectThread != null) {
 				mConnectThread.cancel();
@@ -371,33 +432,114 @@ public class MainActivity extends Activity implements OnClickListener {
 				item.put("list", input);
 				mData.add(item);
 
-				adapter = new SimpleAdapter(MainActivity.this, mData, R.layout.list_item, new String[]{"list"},
-						new int[]{R.id.tv_item});
-				lv.setAdapter(adapter);
-				try {
-					mConnectedThread.write(input.getBytes());
-				} catch (Exception e) {
-				}
+				//adapter = new SimpleAdapter(MainActivity.this, mData, R.layout.list_item, new String[]{"list"},
+						//new int[]{R.id.tv_item});
+				//lv.setAdapter(adapter);
+//				try {
+//					mConnectedThread.write(input.getBytes());
+//				} catch (Exception e) {
+//				}
 				//mEditText.setText("");
 			}
-		} else if (v == HEX_Send_Btn) {
-			String input=String.valueOf(0xff);
-			int i=254;
-			byte[] txbuf=new byte[16];
-			txbuf[0]=(byte)0xff;
-			txbuf[1]=(byte)0x66;
-			txbuf[2]=(byte)0xf0;
-			txbuf[3]=(byte)0xfe;
-			txbuf[4]=(byte)0xff; // ok
-			txbuf[15]=(byte)i;
-			//lblTitle_bt_rx.setText("HEX_Send_Btn");
-			//write(intToBytes(0xff));
+		}
+		else if (v == BT_DOWN_ADD) {
+			if(bm_down_time<7000)
+				bm_down_time+=100;
+			lblTitle_BM_DOWN_time.setText(String.valueOf(bm_down_time));
+		}
+		else if (v == BT_DOWN_DEC) {
+			if(bm_down_time>100)
+				bm_down_time-=100;
+			lblTitle_BM_DOWN_time.setText(String.valueOf(bm_down_time));
+		}
+		else if (v == BT_UP_ADD) {
+			if(bm_up_time<7000)
+				bm_up_time+=100;
+			lblTitle_BM_UP_time.setText(String.valueOf(bm_up_time));
+		}
+		else if (v == BT_UP_DEC) {
+			if(bm_up_time>100)
+				bm_up_time-=100;
+			lblTitle_BM_UP_time.setText(String.valueOf(bm_up_time));
+		}
+
+		else if (v == BT_BACK_ADD) {
+			//if(bm_back_time<60000)
+				bm_back_time+=100;
+			lblTitle_BM_BACK_time.setText(String.valueOf(bm_back_time));
+		}
+		else if (v == BT_BACK_DEC) {
+			if(bm_back_time>100)
+				bm_back_time-=100;
+			lblTitle_BM_BACK_time.setText(String.valueOf(bm_back_time));
+		}
+
+		else if (v == BT_DOWN_OK) {
+			BM_txbuf[2]=(byte)0x01;
+			BM_txbuf[3]=(byte)((bm_down_time>>8)&0xff);
+			BM_txbuf[4]=(byte)((bm_down_time)&0xff);
+			BM_txbuf[5]=(byte)0x00;
+			BM_txbuf[6]=(byte)0x00;
+			BM_txbuf[7]=data_generate_sum(BM_txbuf);
 			try {
-				mConnectedThread.write(txbuf);
+				mConnectedThread.write(BM_txbuf);
+				//mConnectedThread.write(input.getBytes());
+			} catch (Exception e) {
+			}
+			bm_tx_data_flag=1;
+		}
+		else if (v == BT_UP_OK) {
+			BM_txbuf[2]=(byte)0x02;
+			BM_txbuf[3]=(byte)((bm_up_time>>8)&0xff);
+			BM_txbuf[4]=(byte)((bm_up_time)&0xff);
+			BM_txbuf[5]=(byte)0x00;
+			BM_txbuf[6]=(byte)0x00;
+			BM_txbuf[7]=data_generate_sum(BM_txbuf);
+			try {
+				mConnectedThread.write(BM_txbuf);
+				//mConnectedThread.write(input.getBytes());
+			} catch (Exception e) {
+			}
+			bm_tx_data_flag=1;
+		}
+		else if (v == BT_BACK_OK) {
+			BM_txbuf[2]=(byte)0x03;
+			BM_txbuf[3]=(byte)((bm_back_time>>8)&0xff);
+			BM_txbuf[4]=(byte)((bm_back_time)&0xff);
+			BM_txbuf[5]=(byte)0x00;
+			BM_txbuf[6]=(byte)0x00;
+			BM_txbuf[7]=data_generate_sum(BM_txbuf);
+			try {
+				mConnectedThread.write(BM_txbuf);
+				//mConnectedThread.write(input.getBytes());
+			} catch (Exception e) {
+			}
+			bm_tx_data_flag=1;
+		}
+		else if (v == BT_BM_ON) {
+			BM_ON_OFF_FLAG=1;
+			lblTitle_BM_ON_OFF.setTextColor(Color.GREEN);
+			lblTitle_BM_ON_OFF.setText("自动后视镜开");
+		}
+		else if (v == BT_BM_OFF) {
+			BM_ON_OFF_FLAG=0;
+			lblTitle_BM_ON_OFF.setTextColor(Color.RED);
+			lblTitle_BM_ON_OFF.setText("自动后视镜关");
+		}
+		else if (v == BT_BM_ON_OFF_OK) {
+			BM_txbuf[2]=(byte)0x05;
+			BM_txbuf[3]=(byte)BM_ON_OFF_FLAG;
+			BM_txbuf[4]=(byte)0x00;
+			BM_txbuf[5]=(byte)0x00;
+			BM_txbuf[6]=(byte)0x00;
+			BM_txbuf[7]=data_generate_sum(BM_txbuf);
+			try {
+				mConnectedThread.write(BM_txbuf);
 				//mConnectedThread.write(input.getBytes());
 			} catch (Exception e) {
 			}
 		}
+		bm_tx_data_flag=1;
 	}
 
 	@Override
@@ -496,7 +638,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		int check_sum_data=0;
 
 
-		for(key_i=0;key_i<13;key_i++) //13字节，加头2 尾1，16byte
+		for(key_i=0;key_i<5;key_i++) //5字节，加头2 尾1，8byte
 		{
 			temp_check_data=(check_sum_data+(uart_buf_dat[2+key_i]&0xff)); //第 3节是数据开始。
 			check_sum_data=temp_check_data&0xff;
@@ -507,7 +649,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//System.out.println(check_sum_data+"--------------------------------");
 		check_sum_data=(byte)( ~check_sum_data+1); //取反+1;
 		//System.out.println(check_sum_data+"--------------------------------");
-		if(check_sum_data==uart_buf_dat[15]) // 最后一个字节是检验和
+		if(check_sum_data==uart_buf_dat[7]) // 最后一个字节是检验和
 		{
 			return 1;
 		}
@@ -515,6 +657,28 @@ public class MainActivity extends Activity implements OnClickListener {
 		{
 			return 0;
 		}
+	}
+
+	byte data_generate_sum(byte[] uart_buf_dat)
+	{
+		int key_i=0;
+		int temp_check_data=0;
+		int check_sum_data=0;
+
+
+		for(key_i=0;key_i<5;key_i++) //5字节，加头2 尾1，8byte
+		{
+			temp_check_data=check_sum_data+uart_buf_dat[(2+key_i)]; //第 3节是数据开始。
+			//printf("temp_check_data:%u\r\n",temp_check_data);
+			check_sum_data=temp_check_data&0xff;
+			//System.out.println(check_sum_data+"-----check_sum_data---------------------------");
+			if(temp_check_data>0xff) //大于255 低位加
+				check_sum_data = (check_sum_data + 1) & 0xff;
+		}
+		//System.out.println(check_sum_data+"-----check_sum_data---------------------------");
+		check_sum_data=(byte)(~check_sum_data+1); //取反+1;
+
+		return (byte)check_sum_data;
 	}
 
 	public void OBD_decode(byte[] buf){
@@ -527,35 +691,43 @@ public class MainActivity extends Activity implements OnClickListener {
 		if(((buf[0])==(byte)0xff)&(buf[1]==(byte)0x66)){
 			if(data_check_sum(buf)==1)
 			{
-				if(buf[2+2]==Battery_Voltage){
-					temp=(float)(((buf[3+2]&0xff)<<8)|(buf[4+2]&0xff));
-					//System.out.println(temp+"--------------------------------");
-					temp=temp/1000;
-					lblTitle_OBD_voltage.setText(String.valueOf(temp));
-				}
-				if(buf[2+2]==Velicele_speed){
-					temp=(float)((buf[3+2]&0xff));
-				//	System.out.println(temp+"--------------------------------");
-					lblTitle_OBD_speed.setText(String.valueOf(temp));
-				}
-				if(buf[2+2]==Engine_RPM){
-					temp=(float)(((buf[3+2]&0xff)<<8)|(buf[4+2]&0xff));
-					//System.out.println(temp+"--------------------------------");
-					temp=temp/4;
-					//	System.out.println(temp+"--------------------------------");
-					lblTitle_OBD_Engine_RPM.setText(String.valueOf(temp));
-				}
-				if(buf[2+2]==Throttle_position){
-					temp=(float)(buf[3+2]&0xff);
-					//System.out.println(temp+"--------------------------------");
-					temp=temp*100/255;
-					//	System.out.println(temp+"--------------------------------");
-					lblTitle_OBD_Throttle_position.setText(String.valueOf(temp));
-				}
+
+//				if(buf[2+2]==Battery_Voltage){
+//					temp=(float)(((buf[3+2]&0xff)<<8)|(buf[4+2]&0xff));
+//					//System.out.println(temp+"--------------------------------");
+//					temp=temp/1000;
+//					lblTitle_OBD_voltage.setText(String.valueOf(temp));
+//				}
+//				if(buf[2+2]==Velicele_speed){
+//					temp=(float)((buf[3+2]&0xff));
+//				//	System.out.println(temp+"--------------------------------");
+//					lblTitle_OBD_speed.setText(String.valueOf(temp));
+//				}
+//				if(buf[2+2]==Engine_RPM){
+//					temp=(float)(((buf[3+2]&0xff)<<8)|(buf[4+2]&0xff));
+//					//System.out.println(temp+"--------------------------------");
+//					temp=temp/4;
+//					//	System.out.println(temp+"--------------------------------");
+//					lblTitle_OBD_Engine_RPM.setText(String.valueOf(temp));
+//				}
+//				if(buf[2+2]==Throttle_position){
+//					temp=(float)(buf[3+2]&0xff);
+//					//System.out.println(temp+"--------------------------------");
+//					temp=temp*100/255;
+//					//	System.out.println(temp+"--------------------------------");
+//					lblTitle_OBD_Throttle_position.setText(String.valueOf(temp));
+//				}
 
 			}
 		}
 	}
+
+	public void bm_set_val_flag(){
+
+		Toast.makeText(this,"参数设置成功", Toast.LENGTH_SHORT).show();
+		//System.out.println("----------Toast设置成功-----------");
+	}
+
 	/**
 	 * Handler可以用来更新UI
 	 * */
@@ -582,11 +754,19 @@ public class MainActivity extends Activity implements OnClickListener {
 			if(task_cnt>0)
 				task_cnt--;
 			if ((task_cnt==0)&&(rx_cnt>0)) {          // 超时，并且有数据
-				lblTitle_bt_rx.setText(byte2HexStr(bt_rx_byte_buf,rx_cnt));
-				//lblTitle_bt_rx.setText(bt_rx_string_buf);
-				OBD_decode(bt_rx_byte_buf);
+				lblTitle_BM_rx_data.setText(byte2HexStr(bt_rx_byte_buf,rx_cnt));
+				//lblTitle_BM_rx_data.setText(bt_rx_string_buf);
+				//OBD_decode(bt_rx_byte_buf);
 				bt_rx_string_buf = "";
 				rx_cnt=0;
+
+				if(bm_tx_data_flag==1) {    // 有命令，比较数据，确认OK
+					if(bt_rx_byte_buf[7]==BM_txbuf[7]) {
+						bm_set_val_flag();
+					}
+					bm_tx_data_flag=0;
+                    //BM_txbuf[7]=(byte)0x00;
+				}
 			}
 
 			mHanlder.postDelayed(this, 1 * 10);//延迟10m秒,再次执行task本身,实现了循环的效果
@@ -597,4 +777,45 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 	};
+
+	private void saveDeviceAddress() {
+		SharedPreferences.Editor editor=getSharedPreferences("device",MODE_PRIVATE).edit();
+		editor.putString("address",device.getAddress());
+		editor.commit();
+	}
+
+	public void autoConnect(){
+		SharedPreferences pref=getSharedPreferences( "device",MODE_PRIVATE);
+		String deviceAddress=pref.getString("address","");
+		Log.d(TAG, "------------------start autoConnect--------------------------");
+		if (deviceAddress!=null){
+			mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+			Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
+					.getBondedDevices();// 获取本机已配对设备
+			if (pairedDevices.size() > 0) {
+				for (BluetoothDevice device1 : pairedDevices) {
+					if (device1.getAddress().equals(deviceAddress)) {
+						device = device1;
+						connect(device);
+						//mHanlder.postDelayed(task, 1000);//第一次调用,延迟1秒执行task
+						break;
+					}
+				}
+			}
+			Log.d(TAG, "------------------autoConnect--------------------------");
+		}
+	}
+	private void getDeviceAndConnect(){
+		final Intent intent = this.getIntent();
+		device =intent.getParcelableExtra("device");
+		saveDeviceAddress();
+		if (device==null){
+			autoConnect();
+		}
+		if (device!=null){
+			//progressDialog.show();
+			new ConnectThread(device).start();
+		}
+	}
 }
+

@@ -2,128 +2,261 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="5dp" >
 
 
 
 
-     <!-- 显示OBD 信息-->
+    <!-- 显示下翻调整时间信息-->
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/TextView_rpm"
+            android:id="@+id/TextView_down_TIMER"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="转速/每分钟："
-            android:singleLine="true" />
-        <TextView
-            android:id="@+id/TextView_rpm_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="转"
-            android:singleLine="true" />
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="                     下翻时间mS:" />
 
         <TextView
-            android:id="@+id/TextView_vss"
+            android:id="@+id/TextView_DOWN__time_VAL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="速度/公里："
-            android:singleLine="true" />
-        <TextView
-            android:id="@+id/TextView_vss_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="公里"
+            android:layout_weight="1"
+            android:text="3000"
+            android:textColor="#00ff00"
             android:singleLine="true" />
 
     </LinearLayout>
 
+    <!-- 显示下翻调整按钮-->
+
     <LinearLayout
+        android:id="@+id/bt_DOWN"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal" >
+        <Button
+            android:id="@+id/bt_DOWN_DEC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
 
-        <TextView
-            android:id="@+id/TextView_Battery_Voltage"
+        <Button
+            android:id="@+id/bt_DOWN_ADD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="电压/伏："
-            android:singleLine="true" />
-        <TextView
-            android:id="@+id/TextView_rpm_Battery_Voltage_val"
+            android:layout_weight="1"
+            android:text="+" />
+        <Button
+            android:id="@+id/bt_DOWN_OK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="伏"
-            android:singleLine="true" />
+            android:layout_weight="1"
+            android:text="确认" />
 
+    </LinearLayout>
+
+    <!-- 显示上翻调整时间信息-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
         <TextView
-            android:id="@+id/TextView_Throttle_position"
+            android:id="@+id/TextView_UP_TIMER"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="油门/%："
+            android:layout_weight="1"
+            android:text="                     上翻时间mS："
             android:singleLine="true" />
         <TextView
-            android:id="@+id/TextView_vss_Throttle_position_val"
+            android:id="@+id/TextView_up_time_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="百份比"
+            android:layout_weight="1"
+            android:text="3000"
+            android:textColor="#00ff00"
             android:singleLine="true" />
 
     </LinearLayout>
 
-    <!-- 显示OBD 信息-->
+    <!-- 显示上翻调整按钮-->
+    <LinearLayout
+        android:id="@+id/bt_up"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bt_up_DEC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/bt_up_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+        <Button
+            android:id="@+id/bt_up_OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="确认" />
+    </LinearLayout>
+
+    <!-- 显示自动回位时间信息-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/TextView_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="                     自动回位时间mS：" />
+
+        <TextView
+            android:id="@+id/TextView_back_time_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="10000"
+            android:textColor="#00ff00"
+            android:singleLine="true" />
+
+    </LinearLayout>
+
+    <!-- 显示自动回位时间调整按钮-->
+    <LinearLayout
+        android:id="@+id/bt_back"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bt_back_DEC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/bt_back_ADD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+        <Button
+            android:id="@+id/bt_back_OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="确认" />
+    </LinearLayout>
 
 
-
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6" >
-    </ListView>
+    <!-- 显示BM ON OFF信息-->
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/TextView1"
+            android:id="@+id/TextView_BM_ON_OFF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="rx display"
+            android:textColor="#00ff00"
+            android:layout_weight="4"
+            android:text="自动后视镜开"
             android:singleLine="true" />
+        <Button
+            android:id="@+id/bt_bm_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="开" />
+        <Button
+            android:id="@+id/bt_bm_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="关" />
+        <Button
+            android:id="@+id/bt_bm_on_off_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="确认" />
+
+    </LinearLayout>
+
+    <!-- 显示车型信息-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/TextView_BM_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#00ff00"
+            android:layout_weight="4"
+            android:text="奇瑞锐虎5"
+            android:singleLine="true" />
+        <Button
+            android:id="@+id/bt_bm_type_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+        <Button
+            android:id="@+id/bt_bm_type_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+        <Button
+            android:id="@+id/bt_bm_type_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="确认" />
 
     </LinearLayout>
 
 
 
-
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/mEditText"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:hint="send commands by Hex"
@@ -133,7 +266,7 @@
 
         <Button
             android:id="@+id/sendBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Send" />
@@ -141,35 +274,36 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal" >
-        <Button
-            android:id="@+id/send_hex_Btn"
+        <TextView
+            android:id="@+id/TextView_BM_RX_DATA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="HEX_Send" />
+            android:layout_weight="1"
+            android:text="RX_DATA"
+            android:singleLine="true" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btnLayout"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/clearBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="清除发送信息" />
 
         <Button
             android:id="@+id/scanBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="蓝牙扫描" />
