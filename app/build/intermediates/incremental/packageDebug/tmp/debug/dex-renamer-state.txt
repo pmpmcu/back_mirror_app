@@ -1,4 +1,0 @@
-#Sun Nov 04 15:11:34 CST 2018
-base.0=G\:\\PROJECT_KAFA\\CAR_LXQ\\back_mirror\\back_mirror_app\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
